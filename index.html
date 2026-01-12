@@ -7,6 +7,33 @@
     <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
+    <section id="leftDashboard" x-data>
+        <label x-text="$store.data.username" id="title"></label>
+        <section id="projectsSectionTItle">
+            <label>Projects</label>
+            <div>
+                <button>+</button>
+            </div>
+        </section>
+        <section id="projects">
+            <template x-for="(project,projectId) in $store.data.projects">
+                <label x-text="project"></label>
+            </template>
+        </section>
+    </section>
+    <section id="TaskSectionTitleBar">
+        <label id="TaskSectionTitle">Vos tâches :</label>
+        <div><button>+</button></div>
+    </section>
+    <section id="finishedTasks" class="genTasksListsAttr">
+        <label id="boxTitle">Terminé</label>
+    </section>
+    <section id="pendingTasks" class="genTasksListsAttr">
+        <label id="boxTitle">En cours</label>
+    </section>
+    <section id="todoTasks" class="genTasksListsAttr">
+        <label id="boxTitle">à faire</label>
+    </section>
     <script type="module" src="src/main.js"></script>
 </body>
 </html>
