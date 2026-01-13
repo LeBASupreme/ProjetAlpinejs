@@ -27,10 +27,10 @@
         <div><button @click="toggleForm()">+</button></div>
     </section>
     
-    <div id="formBackdrop" x-show="showForm" @click="toggleForm()"></div>
+    <div id="formBackdrop" x-show="showForm" @click="cancelEdit()"></div>
     
     <section id="taskFormSection" x-show="showForm">
-        <form @submit.prevent="addTask">
+        <form @submit.prevent="saveTask">
             <div>
                 <label>Titre</label>
                 <input x-model="newTask.title" type="text" placeholder="Titre de la tâche" required>
@@ -40,20 +40,50 @@
                 <textarea x-model="newTask.description" placeholder="Description de la tâche"></textarea>
             </div>
             <div class="buttonContainer">
-                <button type="submit">Ajouter</button>
-                <button type="button" @click="toggleForm()">Annuler</button>
+                <button type="submit" x-text="newTask.id ? 'Modifier' : 'Ajouter'"></button>
+                <button type="button" @click="cancelEdit()">Annuler</button>
             </div>
         </form>
     </section>
     
     <section id="finishedTasks" class="genTasksListsAttr">
         <label id="boxTitle">Terminé</label>
+        <template x-for="task in $store.data.tasks.filter(t => t.status === 'Terminé')" :key="task.id">
+            <div class="taskCard">
+                <h3 x-text="task.title"></h3>
+                <p x-text="task.description"></p>
+                <div class="taskActions">
+                    <button class="editBtn" @click="editTask(task)">✏️</button>
+                    <button class="deleteBtn" @click="deleteTask(task.id)">🗑️</button>
+                </div>
+            </div>
+        </template>
     </section>
     <section id="pendingTasks" class="genTasksListsAttr">
         <label id="boxTitle">En cours</label>
+        <template x-for="task in $store.data.tasks.filter(t => t.status === 'En cours')" :key="task.id">
+            <div class="taskCard">
+                <h3 x-text="task.title"></h3>
+                <p x-text="task.description"></p>
+                <div class="taskActions">
+                    <button class="editBtn" @click="editTask(task)">✏️</button>
+                    <button class="deleteBtn" @click="deleteTask(task.id)">🗑️</button>
+                </div>
+            </div>
+        </template>
     </section>
     <section id="todoTasks" class="genTasksListsAttr">
         <label id="boxTitle">à faire</label>
+        <template x-for="task in $store.data.tasks.filter(t => t.status === 'à faire')" :key="task.id">
+            <div class="taskCard">
+                <h3 x-text="task.title"></h3>
+                <p x-text="task.description"></p>
+                <div class="taskActions">
+                    <button class="editBtn" @click="editTask(task)">✏️</button>
+                    <button class="deleteBtn" @click="deleteTask(task.id)">🗑️</button>
+                </div>
+            </div>
+        </template>
     </section>
     <script src="src/main.js"></script>
 </body>

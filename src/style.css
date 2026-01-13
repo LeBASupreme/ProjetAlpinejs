@@ -133,6 +133,7 @@ body{
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .genTasksListsAttr #boxTitle{
@@ -143,6 +144,7 @@ body{
     text-align: center;
     border-bottom: 2px solid rgb(113, 64, 0);
     color: rgb(113, 64, 0);
+    flex-shrink: 0;
 }
 
 #finishedTasks{
@@ -172,19 +174,18 @@ body{
 }
 
 #taskFormSection{
-    grid-column: 4/10;
-    grid-row: 4/5;
-    margin: 10px 5%;
-    border: 2px solid rgb(113, 64, 0);
-    border-radius: 10px;
-    padding: 200px;
-    background-color: #f9f6f0;
+    grid-column: 4/-4;
+    grid-row: 3/5;
+    margin: 5px 5%;
+    border: 4px solid rgb(113, 64, 0);
+    border-radius: 5px;
+    padding: 250px;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     position: relative;
     z-index: 100;
-    height: 20%;
     box-sizing: border-box;
 }
 
@@ -195,7 +196,7 @@ body{
     width: 100%;
 }
 
-#taskFormSection form > div {
+#taskFormSection form div {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -211,11 +212,10 @@ body{
 #taskFormSection textarea {
     border: 1px solid rgb(113, 64, 0);
     border-radius: 5px;
-    padding: 10px;
     font-family: Arial;
     font-size: 14px;
     color: #333;
-    box-sizing: border-box;
+    width: 100%;
 }
 
 #taskFormSection input::placeholder,
@@ -270,4 +270,62 @@ body{
 
 #taskFormSection button[type="button"]:hover {
     background-color: #ccc;
+}
+
+.taskCard {
+    padding: 15px;
+    border: 1px solid rgb(113, 64, 0);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.taskCard h3 {
+    margin: 0;
+    color: rgb(113, 64, 0);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.taskCard p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.taskActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.taskActions button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.editBtn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.editBtn:hover {
+    background-color: #45a049;
+}
+
+.deleteBtn {
+    background-color: #f44336;
+    color: white;
+}
+
+.deleteBtn:hover {
+    background-color: #da190b;
 }
