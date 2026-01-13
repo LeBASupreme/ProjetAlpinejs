@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="src/style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body>
+<body x-data="taskApp()">
     <section id="leftDashboard" x-data>
         <label x-text="$store.data.username" id="title"></label>
         <section id="projectsSectionTItle">
@@ -23,8 +24,28 @@
     </section>
     <section id="TaskSectionTitleBar">
         <label id="TaskSectionTitle">Vos tâches :</label>
-        <div><button>+</button></div>
+        <div><button @click="toggleForm()">+</button></div>
     </section>
+    
+    <div id="formBackdrop" x-show="showForm" @click="toggleForm()"></div>
+    
+    <section id="taskFormSection" x-show="showForm">
+        <form @submit.prevent="addTask">
+            <div>
+                <label>Titre</label>
+                <input x-model="newTask.title" type="text" placeholder="Titre de la tâche" required>
+            </div>
+            <div>
+                <label>Description</label>
+                <textarea x-model="newTask.description" placeholder="Description de la tâche"></textarea>
+            </div>
+            <div class="buttonContainer">
+                <button type="submit">Ajouter</button>
+                <button type="button" @click="toggleForm()">Annuler</button>
+            </div>
+        </form>
+    </section>
+    
     <section id="finishedTasks" class="genTasksListsAttr">
         <label id="boxTitle">Terminé</label>
     </section>
@@ -34,6 +55,6 @@
     <section id="todoTasks" class="genTasksListsAttr">
         <label id="boxTitle">à faire</label>
     </section>
-    <script type="module" src="src/main.js"></script>
+    <script src="src/main.js"></script>
 </body>
 </html>

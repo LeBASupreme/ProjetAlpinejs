@@ -159,3 +159,115 @@ body{
     grid-column:8/10;
     grid-row: 5/10;
 }
+
+#formBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 99;
+}
+
+#taskFormSection{
+    grid-column: 4/10;
+    grid-row: 4/5;
+    margin: 10px 5%;
+    border: 2px solid rgb(113, 64, 0);
+    border-radius: 10px;
+    padding: 200px;
+    background-color: #f9f6f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 100;
+    height: 20%;
+    box-sizing: border-box;
+}
+
+#taskFormSection form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+#taskFormSection form > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#taskFormSection label {
+    color: rgb(113, 64, 0);
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#taskFormSection input,
+#taskFormSection textarea {
+    border: 1px solid rgb(113, 64, 0);
+    border-radius: 5px;
+    padding: 10px;
+    font-family: Arial;
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box;
+}
+
+#taskFormSection input::placeholder,
+#taskFormSection textarea::placeholder {
+    color: #999;
+}
+
+#taskFormSection input:focus,
+#taskFormSection textarea:focus {
+    outline: none;
+    border-color: rgb(113, 64, 0);
+    box-shadow: 0 0 5px rgba(113, 64, 0, 0.3);
+}
+
+#taskFormSection textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#taskFormSection .buttonContainer {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+#taskFormSection button[type="submit"],
+#taskFormSection button[type="button"] {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+#taskFormSection button[type="submit"] {
+    background-color: rgb(113, 64, 0);
+    color: white;
+}
+
+#taskFormSection button[type="submit"]:hover {
+    background-color: rgb(140, 80, 0);
+}
+
+#taskFormSection button[type="button"] {
+    background-color: #ddd;
+    color: #333;
+}
+
+#taskFormSection button[type="button"]:hover {
+    background-color: #ccc;
+}
