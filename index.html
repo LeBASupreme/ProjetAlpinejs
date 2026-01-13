@@ -6,13 +6,13 @@
     <title>Document</title>
     <link rel="stylesheet" href="src/style.css">
 </head>
-<body>
-    <section id="leftDashboard" x-data>
+<body x-data>
+    <section id="leftDashboard">
         <label x-text="$store.data.username" id="title"></label>
         <section id="projectsSectionTItle">
             <label>Projects</label>
             <div>
-                <button>+</button>
+                <button @click="$store.data.showAddProjectsForm=!$store.data.showAddProjectsForm">+</button>
             </div>
         </section>
         <section id="projects">
@@ -21,9 +21,33 @@
             </template>
         </section>
     </section>
+    <form id="form" @submit.prevent x-show="$store.data.showAddTaskForm"> 
+        <label id="FormTitle">Ajouter une tâche</label>
+        <template x-for="(field,fieldId) in $store.data.addTaskFormFields" :key="fieldId">
+            <div class="field">
+                <label x-text="fieldId"></label>
+                <input type="text" x-model="$store.data.addTaskFormFields[fieldId]">
+            </div>
+        </template>
+        <div class="field">
+            <input id="submitButton" type="submit" value="Soumettre" @click="$store.data.addTask()">
+        </div>
+    </form>
+    <form id="form" @submit.prevent x-show="$store.data.showAddProjectsForm"> 
+        <label id="FormTitle">Ajouter une tâche</label>
+        <template x-for="(field,fieldId) in $store.data.addProjectFormFields" :key="fieldId">
+            <div class="field">
+                <label x-text="fieldId"></label>
+                <input type="text" x-model="$store.data.addProjectFormFields[fieldId]">
+            </div>
+        </template>
+        <div class="field">
+            <input id="submitButton" type="submit" value="Soumettre" @click="$store.data.addProject()">
+        </div>
+    </form>
     <section id="TaskSectionTitleBar">
         <label id="TaskSectionTitle">Vos tâches :</label>
-        <div><button>+</button></div>
+        <div><button @click="$store.data.showAddTaskForm=!$store.data.showAddTaskForm">+</button></div>
     </section>
     <section id="finishedTasks" class="genTasksListsAttr">
         <label id="boxTitle">Terminé</label>
