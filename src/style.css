@@ -126,13 +126,20 @@ body{
     flex-shrink: 0;
 }
 
+#tasksLists{
+    grid-column: 4/10;
+    grid-row: 5/10;
+    display: flex;
+    gap: 2%;
+    justify-content: center;
+}
+
 .genTasksListsAttr{
-    margin-left: 5%;
-    margin-right: 5%;
     border: 2px solid rgb(113, 64, 0);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    width: 30%;
 }
 
 .genTasksListsAttr #boxTitle{
@@ -143,21 +150,21 @@ body{
     text-align: center;
     border-bottom: 2px solid rgb(113, 64, 0);
     color: rgb(113, 64, 0);
+    flex-shrink: 0;
 }
 
-#finishedTasks{
-    grid-column:4/6;
-    grid-row: 5/10;
+.remButton{
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border: 2px solid rgb(113, 64, 0);
+    border-radius: 15px;
 }
 
-#pendingTasks{
-    grid-column: 6/8;
-    grid-row: 5/10;
-}
-
-#todoTasks{
-    grid-column:8/10;
-    grid-row: 5/10;
+.taskList{
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 #form{
@@ -202,4 +209,15 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+#taskPlaceHolder{
+    grid-row: 5/-5;
+    grid-column: 5/-3;
+    color: rgb(113, 64, 0);
+    font-size: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }

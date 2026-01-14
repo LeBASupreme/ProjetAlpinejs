@@ -17,7 +17,7 @@
         </section>
         <section id="projects">
             <template x-for="(project,projectId) in $store.data.projects">
-                <label x-text="project"></label>
+                <label @click="$store.data.pickedProjectId=project.ProjectId" x-bind:style="{color:project.ProjectId==$store.data.pickedProjectId?'rgb(228, 129, 0)':'rgb(113, 64, 0)'}" x-text="project.Nom"></label>
             </template>
         </section>
     </section>
@@ -34,7 +34,7 @@
         </div>
     </form>
     <form id="form" @submit.prevent x-show="$store.data.showAddProjectsForm"> 
-        <label id="FormTitle">Ajouter une tâche</label>
+        <label id="FormTitle">Créer un projet</label>
         <template x-for="(field,fieldId) in $store.data.addProjectFormFields" :key="fieldId">
             <div class="field">
                 <label x-text="fieldId"></label>
@@ -45,19 +45,31 @@
             <input id="submitButton" type="submit" value="Soumettre" @click="$store.data.addProject()">
         </div>
     </form>
-    <section id="TaskSectionTitleBar">
+    <section id="TaskSectionTitleBar" x-show="$store.data.pickedProjectId!=null">
         <label id="TaskSectionTitle">Vos tâches :</label>
         <div><button @click="$store.data.showAddTaskForm=!$store.data.showAddTaskForm">+</button></div>
     </section>
-    <section id="finishedTasks" class="genTasksListsAttr">
-        <label id="boxTitle">Terminé</label>
+    <section id="tasksLists" x-show="$store.data.pickedProjectId!=null">
+        <section id="finishedTasks" class="genTasksListsAttr">
+            <label id="boxTitle">Terminé</label>
+            <section class="taskList">
+                
+            </section>
+        </section>
+        <section id="pendingTasks" class="genTasksListsAttr">
+            <label id="boxTitle">En cours</label>
+            <section class="taskList">
+                
+            </section>
+        </section>
+        <section id="todoTasks" class="genTasksListsAttr">
+            <label id="boxTitle">à faire</label>
+            <section class="taskList">
+                
+            </section>
+        </section>
     </section>
-    <section id="pendingTasks" class="genTasksListsAttr">
-        <label id="boxTitle">En cours</label>
-    </section>
-    <section id="todoTasks" class="genTasksListsAttr">
-        <label id="boxTitle">à faire</label>
-    </section>
+    <label x-show="$store.data.pickedProjectId==null" id="taskPlaceHolder">Please pick a project</label>
     <script type="module" src="src/main.js"></script>
 </body>
 </html>
