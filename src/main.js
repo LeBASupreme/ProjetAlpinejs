@@ -8,7 +8,9 @@ document.addEventListener("alpine:init",()=>{
         pickedProjectId:null,
         addTaskFormFields:{
             "Nom":"",
-            "Description":""
+            "Description":"",
+            "Date début (format xxxx-xx-xx)":"",
+            "Date fin (format xxxx-xx-xx)":""
         },
         addProjectFormFields:{
             "Nom":"",
@@ -17,7 +19,7 @@ document.addEventListener("alpine:init",()=>{
         showAddProjectsForm:false,
         addTask:function(){
             //todo pending finished
-            this.tasks.push({TaskId:Date.now(),Nom:this.addTaskFormFields.Nom,Description:this.addTaskFormFields.Description,Statut:"Todo"});
+            this.tasks.push({TaskId:Date.now(),Nom:this.addTaskFormFields.Nom,Description:this.addTaskFormFields.Description,Statut:"Todo",dateDeb:new Date(this.addTaskFormFields["Date début (format xxxx-xx-xx)"]),dateFin:new Date(this.addTaskFormFields["Date fin (format xxxx-xx-xx)"])});
             for(let i in this.addTaskFormFields){
                 this.addTaskFormFields[i]="";
             }
