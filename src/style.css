@@ -189,7 +189,16 @@ body{
     padding-right: 20%;
 }
 
-.field textarea,.field input{
+.field #Statuts{
+    display: flex;
+    gap:5%;
+} 
+
+.field #Statuts button{
+    width: 30%;
+}
+
+.field textarea,.field input, .field button{
     border: 2px solid rgb(113, 64, 0);
     border-radius: 3px;
     height: 30px;
@@ -209,6 +218,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 #taskPlaceHolder{
@@ -220,4 +230,31 @@ body{
     flex-direction: column;
     justify-content: center;
     text-align: center;
+}
+
+.taskList section{
+    height: 40px;
+    display: flex;
+    border-bottom: 2px solid rgb(113, 64, 0);
+}
+
+.taskList section label,.taskList section div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.taskList section label{
+    width: 85%;
+    margin: 2%;
+    overflow: auto;
+    flex-shrink: 0;
+}
+
+.taskList section div button{
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    border: 2px solid rgb(113, 64, 0);
+    background-color: white;
 }

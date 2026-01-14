@@ -26,11 +26,14 @@
         <template x-for="(field,fieldId) in $store.data.addTaskFormFields" :key="fieldId">
             <div class="field">
                 <label x-text="fieldId"></label>
-                <input type="text" x-model="$store.data.addTaskFormFields[fieldId]">
+                <input x-bind:type="fieldId.includes('Date')?'date':'text'" x-model="$store.data.addTaskFormFields[fieldId]">
             </div>
         </template>
         <div class="field">
             <input id="submitButton" type="submit" value="Soumettre" @click="$store.data.addTask()">
+        </div>
+        <div class="field">
+            <button id="submitButton" @click="$store.data.showAddTaskForm=!$store.data.showAddTaskForm">Fermer</button>
         </div>
     </form>
     <form id="form" @submit.prevent x-show="$store.data.showAddProjectsForm"> 
@@ -45,6 +48,33 @@
             <input id="submitButton" type="submit" value="Soumettre" @click="$store.data.addProject()">
         </div>
     </form>
+    <form id="form" @submit.prevent x-show="$store.data.showUpdateForm"> 
+        <label id="FormTitle">Créer un projet</label>
+        <template x-for="(field,fieldId) in $store.data.addTaskFormFields" :key="fieldId">
+            <div class="field" x-show="fieldId!=`Statut`&&fieldId!=`TaskId`">
+                <label x-text="fieldId"></label>
+                <input x-bind:type="fieldId.includes('Date')?'date':'text'" x-model="$store.data.addTaskFormFields[fieldId]">
+            </div>
+        </template>
+        <div class="field">
+            <div id="Statuts">
+                <button id="submitButton" @click="$store.data.addTaskFormFields['Statut']='Todo'">à faire</button>
+                <button id="submitButton" @click="$store.data.addTaskFormFields['Statut']='Pending'">en cours</button>
+                <button id="submitButton" @click="$store.data.addTaskFormFields['Statut']='Finished'">fait</button>
+            </div>
+            <button id="submitButton" @click="$store.data.modifyTask($store.data.addTaskFormFields['TaskId'])">Sauvegarder</button>
+            <button id="submitButton" @click="()=>{
+                $store.data.showUpdateForm=!$store.data.showUpdateForm
+                $store.data.addTaskFormFields={
+                    'Nom':'',
+                    'Description':'',
+                    'Date début':'',
+                    'Date fin':''
+                }
+            }">Fermer</button>
+        </div>
+
+    </form>
     <section id="TaskSectionTitleBar" x-show="$store.data.pickedProjectId!=null">
         <label id="TaskSectionTitle">Vos tâches :</label>
         <div><button @click="$store.data.showAddTaskForm=!$store.data.showAddTaskForm">+</button></div>
@@ -53,19 +83,46 @@
         <section id="finishedTasks" class="genTasksListsAttr">
             <label id="boxTitle">Terminé</label>
             <section class="taskList">
-                
+                <template x-for="(task,taskId) in $store.data.tasks.filter(task=>task.Statut=='Finished'&&task.ProjectId==$store.data.pickedProjectId)" :key="taskId">
+                    <section @click="()=>{
+                        $store.data.showUpdateForm=!$store.data.showUpdateForm;
+                        for(let i in $store.data.addTaskFormFields){
+                            $store.data.addTaskFormFields[i]=(i!='Date fin'&&i!='Date début'?task[i]:$store.data.toYMD(task[i]));
+                            $store.data.addTaskFormFields.Statut=task.Statut;
+                            $store.data.addTaskFormFields.TaskId=task.TaskId;
+                        }
+                    }"><label x-text="task.Nom"></label><div><button @click="$store.data.tasks.splice(taskId,1)">x</button></div></section>
+                </template>
             </section>
         </section>
         <section id="pendingTasks" class="genTasksListsAttr">
             <label id="boxTitle">En cours</label>
             <section class="taskList">
-                
+                <template x-for="(task,taskId) in $store.data.tasks.filter(task=>task.Statut=='Pending'&&task.ProjectId==$store.data.pickedProjectId)" :key="taskId">
+                    <section @click="()=>{
+                        $store.data.showUpdateForm=!$store.data.showUpdateForm;
+                        for(let i in $store.data.addTaskFormFields){
+                            $store.data.addTaskFormFields[i]=(i!='Date fin'&&i!='Date début'?task[i]:$store.data.toYMD(task[i]));
+                            $store.data.addTaskFormFields.Statut=task.Statut;
+                            $store.data.addTaskFormFields.TaskId=task.TaskId;
+                        }
+                    }"><label x-text="task.Nom"></label><div><button @click="$store.data.tasks.splice(taskId,1)">x</button></div></section>
+                </template>
             </section>
         </section>
         <section id="todoTasks" class="genTasksListsAttr">
             <label id="boxTitle">à faire</label>
             <section class="taskList">
-                
+                <template x-for="(task,taskId) in $store.data.tasks.filter(task=>task.Statut=='Todo'&&task.ProjectId==$store.data.pickedProjectId)" :key="taskId">
+                    <section @click="()=>{
+                        $store.data.showUpdateForm=!$store.data.showUpdateForm;
+                        for(let i in $store.data.addTaskFormFields){
+                            $store.data.addTaskFormFields[i]=(i!='Date fin'&&i!='Date début'?task[i]:$store.data.toYMD(task[i]));
+                            $store.data.addTaskFormFields.Statut=task.Statut;
+                            $store.data.addTaskFormFields.TaskId=task.TaskId;
+                        }
+                    }"><label x-text="task.Nom"></label><div><button @click="$store.data.tasks.splice(taskId,1)">x</button></div></section>
+                </template>
             </section>
         </section>
     </section>
