@@ -39,52 +39,91 @@
                 <label>Description</label>
                 <textarea x-model="newTask.description" placeholder="Description de la tâche"></textarea>
             </div>
-            <div class="buttonContainer">
-                <button type="submit" x-text="newTask.id ? 'Modifier' : 'Ajouter'"></button>
-                <button type="button" @click="cancelEdit()">Annuler</button>
-            </div>
-        </form>
-    </section>
-    
-    <section id="finishedTasks" class="genTasksListsAttr">
-        <label id="boxTitle">Terminé</label>
-        <template x-for="task in $store.data.tasks.filter(t => t.status === 'Terminé')" :key="task.id">
-            <div class="taskCard">
-                <h3 x-text="task.title"></h3>
-                <p x-text="task.description"></p>
-                <div class="taskActions">
-                    <button class="editBtn" @click="editTask(task)">✏️</button>
-                    <button class="deleteBtn" @click="deleteTask(task.id)">🗑️</button>
-                </div>
+        </template>
+        <div class="field">
+            <label>Date de début :</label>
+            <input type="date" id="taskDateDebut">
+        </div>
+        <div class="field">
+            <label>Date limite :</label>
+            <input type="date" id="taskDateFin">
+        </div>
+        <div class="field">
+            <input id="submitButton" type="submit" value="Soumettre" @click="$store.data.addTask()">
+        </div>
+    </form>
+    <form id="form" @submit.prevent x-show="$store.data.showAddProjectsForm"> 
+        <label id="FormTitle">Créer un projet</label>
+        <template x-for="(field,fieldId) in $store.data.addProjectFormFields" :key="fieldId">
+            <div class="field">
+                <label x-text="fieldId"></label>
+                <input type="text" x-model="$store.data.addProjectFormFields[fieldId]">
             </div>
         </template>
+        <div class="field">
+            <input id="submitButton" type="submit" value="Soumettre" @click="$store.data.addProject()">
+        </div>
+    </form>
+    <section id="TaskSectionTitleBar" x-show="$store.data.pickedProjectId!=null">
+        <label id="TaskSectionTitle">Vos tâches :</label>
+        <div><button @click="$store.data.showAddTaskForm=!$store.data.showAddTaskForm">+</button></div>
     </section>
-    <section id="pendingTasks" class="genTasksListsAttr">
-        <label id="boxTitle">En cours</label>
-        <template x-for="task in $store.data.tasks.filter(t => t.status === 'En cours')" :key="task.id">
-            <div class="taskCard">
-                <h3 x-text="task.title"></h3>
-                <p x-text="task.description"></p>
-                <div class="taskActions">
-                    <button class="editBtn" @click="editTask(task)">✏️</button>
-                    <button class="deleteBtn" @click="deleteTask(task.id)">🗑️</button>
-                </div>
+    <section id="tasksLists" x-show="$store.data.pickedProjectId!=null">
+        <section id="finishedTasks" class="genTasksListsAttr">
+            <label id="boxTitle">Terminé</label>
+            <section class="taskList">
+                <template x-for="task in $store.data.tasks.filter(t => t.ProjectId==$store.data.pickedProjectId && t.Statut=='finished')" :key="task.TaskId">
+                    <div class="task" @click="$store.data.openTaskModal(task)" style="cursor: pointer;">
+                        <label x-text="task.Nom"></label>
+                    </div>
+                </template>
+            </section>
+        </section>
+        <section id="pendingTasks" class="genTasksListsAttr">
+            <label id="boxTitle">En cours</label>
+            <section class="taskList">
+                <template x-for="task in $store.data.tasks.filter(t => t.ProjectId==$store.data.pickedProjectId && t.Statut=='pending')" :key="task.TaskId">
+                    <div class="task" @click="$store.data.openTaskModal(task)" style="cursor: pointer;">
+                        <label x-text="task.Nom"></label>
+                    </div>
+                </template>
+            </section>
+        </section>
+        <section id="todoTasks" class="genTasksListsAttr">
+            <label id="boxTitle">à faire</label>
+            <section class="taskList">
+                <template x-for="task in $store.data.tasks.filter(t => t.ProjectId==$store.data.pickedProjectId && t.Statut=='todo')" :key="task.TaskId">
+                    <div class="task" @click="$store.data.openTaskModal(task)" style="cursor: pointer;">
+                        <label x-text="task.Nom"></label>
+                    </div>
+                </template>
+            </section>
+        </section>
+    </section>
+    <div x-show="$store.data.showTaskModal" class="modal-backdrop">
+        <div class="modal-content">
+            <h2 x-text="$store.data.selectedTask?.Nom"></h2>
+            <div class="modal-field">
+                <label>Description:</label>
+                <textarea x-model.debounce="$store.data.selectedTask.Description"></textarea>
             </div>
-        </template>
-    </section>
-    <section id="todoTasks" class="genTasksListsAttr">
-        <label id="boxTitle">à faire</label>
-        <template x-for="task in $store.data.tasks.filter(t => t.status === 'à faire')" :key="task.id">
-            <div class="taskCard">
-                <h3 x-text="task.title"></h3>
-                <p x-text="task.description"></p>
-                <div class="taskActions">
-                    <button class="editBtn" @click="editTask(task)">✏️</button>
-                    <button class="deleteBtn" @click="deleteTask(task.id)">🗑️</button>
-                </div>
+            <div class="modal-field">
+                <label>Date de début:</label>
+                <input type="date" :value="$store.data.formatDateForInput($store.data.selectedTask?.dateDeb)" @change="$store.data.updateTaskDate($event.target.value,'dateDeb')">
             </div>
-        </template>
-    </section>
-    <script src="src/main.js"></script>
+            <div class="modal-field">
+                <label>Date limite:</label>
+                <input type="date" :value="$store.data.formatDateForInput($store.data.selectedTask?.dateFin)" @change="$store.data.updateTaskDate($event.target.value,'dateFin')">
+            </div>
+            <div class="modal-buttons">
+                <button @click="$store.data.changeTaskStatus('todo')" class="modal-btn modal-btn-todo">À faire</button>
+                <button @click="$store.data.changeTaskStatus('pending')" class="modal-btn modal-btn-pending">En cours</button>
+                <button @click="$store.data.changeTaskStatus('finished')" class="modal-btn modal-btn-finished">Terminé</button>
+            </div>
+            <button @click="$store.data.closeTaskModal()" class="modal-btn-close">Fermer</button>
+        </div>
+    </div>
+    <label x-show="$store.data.pickedProjectId==null" id="taskPlaceHolder">Please pick a project</label>
+    <script type="module" src="src/main.js"></script>
 </body>
 </html>

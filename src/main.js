@@ -1,67 +1,64 @@
-document.addEventListener("alpine:init", () => {
-    Alpine.store("data", {
-        projects: ["pj1", "pj2"],
-        username: "John doey",
-        tasks: JSON.parse(localStorage.getItem("tasks")) || []
-    });
-});
-
-function taskApp() {
-    return {
-        showForm: false,
-        newTask: {
-            id: null,
-            title: "",
-            description: ""
+import Alpine from "alpinejs";
+window.Alpine=Alpine;
+document.addEventListener("alpine:init",()=>{
+    Alpine.store("data",{
+        projects:[],
+        tasks:[],
+        username:"John doey",
+        pickedProjectId:null,
+        selectedTask:null,
+        showTaskModal:false,
+        addTaskFormFields:{
+            "Nom":"",
+            "Description":"",
         },
-        toggleForm() {
-            this.showForm = !this.showForm;
-            if (!this.showForm) {
-                this.newTask = { id: null, title: "", description: "" };
+        addProjectFormFields:{
+            "Nom":"",
+        },
+        showAddTaskForm:false,
+        showAddProjectsForm:false,
+        addTask:function(){
+            const dateDebut = document.getElementById('taskDateDebut').value;
+            const dateFin = document.getElementById('taskDateFin').value;
+            this.tasks.push({TaskId:Date.now(),ProjectId:this.pickedProjectId,Nom:this.addTaskFormFields.Nom,Description:this.addTaskFormFields.Description,Statut:"todo",dateDeb:dateDebut ? new Date(dateDebut) : new Date(),dateFin:dateFin ? new Date(dateFin) : new Date()});
+            for(let i in this.addTaskFormFields){
+                this.addTaskFormFields[i]="";
+            }
+            document.getElementById('taskDateDebut').value = '';
+            document.getElementById('taskDateFin').value = '';
+            this.showAddTaskForm=!this.showAddTaskForm;
+            console.log(this.tasks);
+        },
+        addProject:function(){
+            this.projects.push({ProjectId:Date.now(),Nom:this.addProjectFormFields.Nom});
+            for(let i in this.addProjectFormFields){
+                this.addProjectFormFields[i]="";
+            }
+            this.showAddProjectsForm=!this.showAddProjectsForm;
+        },
+        openTaskModal:function(task){
+            this.selectedTask=task;
+            this.showTaskModal=true;
+        },
+        closeTaskModal:function(){
+            this.showTaskModal=false;
+            this.selectedTask=null;
+        },
+        changeTaskStatus:function(newStatus){
+            if(this.selectedTask){
+                this.selectedTask.Statut=newStatus;
+                this.closeTaskModal();
             }
         },
-        cancelEdit() {
-            this.showForm = false;
-            this.newTask = { id: null, title: "", description: "" };
+        formatDateForInput:function(date){
+            if(!date) return '';
+            if(typeof date === 'string') return date.split('T')[0];
+            return new Date(date).toISOString().split('T')[0];
         },
-        editTask(task) {
-            this.newTask = {
-                id: task.id,
-                title: task.title,
-                description: task.description
-            };
-            this.showForm = true;
-        },
-        saveTask() {
-            if (this.newTask.title.trim()) {
-                if (this.newTask.id) {
-                    const taskIndex = Alpine.store("data").tasks.findIndex(t => t.id === this.newTask.id);
-                    if (taskIndex !== -1) {
-                        Alpine.store("data").tasks[taskIndex].title = this.newTask.title;
-                        Alpine.store("data").tasks[taskIndex].description = this.newTask.description;
-                    }
-                } else {
-                    const task = {
-                        id: Date.now(),
-                        title: this.newTask.title,
-                        description: this.newTask.description,
-                        status: "à faire"
-                    };
-                    Alpine.store("data").tasks.push(task);
-                }
-                this.saveTasks();
-                this.newTask = { id: null, title: "", description: "" };
-                this.showForm = false;
+        updateTaskDate:function(dateStr,dateField){
+            if(this.selectedTask && dateStr){
+                this.selectedTask[dateField]=new Date(dateStr);
             }
-        },
-        deleteTask(taskId) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer cette tâche ?")) {
-                Alpine.store("data").tasks = Alpine.store("data").tasks.filter(t => t.id !== taskId);
-                this.saveTasks();
-            }
-        },
-        saveTasks() {
-            localStorage.setItem("tasks", JSON.stringify(Alpine.store("data").tasks));
         }
-    };
-}
+    });
+})
